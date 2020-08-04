@@ -1,4 +1,4 @@
-# VBA LinSub
+# linsub
 A linear algebra VBA module
 
 Includes:
