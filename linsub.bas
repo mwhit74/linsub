@@ -1,3 +1,4 @@
+Attribute VB_Name = "linsub"
 Option Explicit
 
 'LU decomposition including partial pivoting
@@ -119,12 +120,31 @@ Private Function back_sub(lu() As Variant, ov() As Variant, b() As Variant) As V
     back_sub = x
 
 End Function
+'Reorders solutions according to order vector
+Private Function reorder(x() As Variant, ov() As Variant) As Variant()
+
+    Dim n As Integer
+    Dim i As Integer
+    
+    n = UBound(x, 1)
+    
+    Dim y() As Variant
+    ReDim y(n)
+    
+    For i = 0 To n
+        y(i) = x(ov(i))
+    Next
+    
+    reorder = y
+    
+End Function
 
 'Performs LU decomp, forward and back substitution returns solution vector
 'to a linear set of equations
 Function solve(lu() As Variant, ov() As Variant, b() As Variant) As Variant()
     Dim n As Integer
     Dim m As Integer
+    Dim xo() As Variant
     
     n = UBound(lu, 1)
     m = UBound(lu, 2)
@@ -136,12 +156,13 @@ Function solve(lu() As Variant, ov() As Variant, b() As Variant) As Variant()
     
     c = forward_elim(lu, ov, b)
     x = back_sub(lu, ov, c)
+    xo = reorder(x, ov)
     
-    solve = x
+    solve = xo
 
 End Function
 
-'Matrix-matrix multiplication 
+'Matrix-matrix multiplication
 Function matmul(a() As Variant, b() As Variant) As Variant()
     Dim i As Integer
     Dim j As Integer
